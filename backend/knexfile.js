@@ -1,13 +1,9 @@
 // Update with your config settings.
-
+const {db} = require('./.env')
 module.exports = {
   
     client: 'postgresql',
-    connection: {
-      database: 'scripts',
-      user: 'postgres',
-      password: 'joao',
-    },
+    connection: db,
 
     pool: {
       min: 2,
