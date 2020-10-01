@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 mongoose.connect('mongodb+srv://script:script@script.n8ir1.mongodb.net/script?retryWrites=true&w=majority', 
-    { useNewUrlParser: true})
+    { useNewUrlParser: true, useUnifiedTopology: true } )
 
     mongoose.Promise = global.Promise
     mongoose.connection.on('connected', () => 
