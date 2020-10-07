@@ -2,7 +2,7 @@
 const {db} = require('./.env')
 module.exports = {
   
-    client: 'postgresql',
+    client: 'pg',
     connection: db,
 
     pool: {

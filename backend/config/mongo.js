@@ -5,11 +5,11 @@ mongoose.connect('mongodb+srv://script:script@script.n8ir1.mongodb.net/script?re
 
     mongoose.Promise = global.Promise
     mongoose.connection.on('connected', () => 
-      console.log(`Mongoose! conectado `)
+      console.log('Mongoose! conectado')
    )
 
    mongoose.connection.on('disconnected', () => 
-      console.log(`Mongoose! desconectado`)
+      console.log('\x1b[41%s\x1b[37m', 'Mongoose! desconectado', '\x1b[0m')
    )
 
    mongoose.connection.on('error', erro => 

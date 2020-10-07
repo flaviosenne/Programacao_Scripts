@@ -3,12 +3,14 @@ const cosign = require('consign')
 
 // instance express
 const app = express()
-app.use(express.json())
 
 // initialize BD
-require('./config/mongo')
+const mongoose = require('./config/mongo')
 const db = require('./config/postgres')
+
+
 app.db = db
+app.mongoose = mongoose
 
 
 cosign()
