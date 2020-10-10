@@ -83,10 +83,10 @@ module.exports = app => {
         const generoId = req.params.id
 
         const page = req.query.page || 1
-        const categories = await app.db.raw(queries.generoWithChildren, 
+        const genero = await app.db.raw(queries.generoWithChildren, 
             generoId)
 
-        const ids = categories.rows.map(c => c.id)
+        const ids = genero.rows.map(c => c.id)
 
         app.db({a: 'livros', u: 'users'})
         .select('a.id', 'a.name', 'a.description', 'a.imageUrl', {
@@ -94,7 +94,7 @@ module.exports = app => {
         })
         .limit(limit).offset(page * limit - limit)
         .whereRaw('?? = ??', ['u.id', 'a.userId'])
-        .whereIn('generoId', ids)
+        .whereIn('generosId', ids)
         .orderBy('a.id', 'desc')
         .then(livros => res.json(livros))
         .catch(err => res.status(500).send(err))

@@ -27,15 +27,15 @@ module.exports = app => {
 
     const remove = async (req, res) => {
         try {
-            existsOrError(req.params.id, 'Código do Gênero não informado')
-            const subgeneros = await app.db('generos')
+            existsOrError(req.params.id, 'Código do Genero não informado')
+            const subgenero = await app.db('generos')
                 .where({ parentId: req.params.id })
             
-            notExistsOrError(subgeneros, 'Genero possui subgêneros.')
+            notExistsOrError(subgenero, 'Genero possui subgeneros.')
 
-            const articles = await app.db('generos')
-                .where({ categoryId: req.params.id })
-            notExistsOrError(articles, 'Genero possui livros')
+            const livros = await app.db('livros')
+                .where({ generosId: req.params.id })
+            notExistsOrError(livros, 'Genero possui livros')
 
             const rowsDeleted = await app.db('generos')
                 .where({ id: req.params.id }).del()
@@ -49,29 +49,29 @@ module.exports = app => {
     }
 
     const withPath = generos => {
-        const getParent = (generos, parentId) => {
-            const parent = generos.filter(parent => parent.id === parentId)
-            return parent.length ? parent[0] : null
+        const getParent = (generos, relacaoId) => {
+            const relacao = generos.filter(relacao => relacao.id === relacaoId)
+            return relacao.length ? relacao[0] : null
         }
 
-        const generoWithPath = generos.map(genero => {
+        const generosWithPath = generos.map(genero => {
             let path = genero.name
             let parent = getParent(generos, genero.parentId)
 
             while(parent) {
                 path = `${parent.name} > ${path}`
-                parent = getParent(generos, parent.parentId)
+                parent = getParent(generos, parent.generosId)
             }
             return { ...genero, path }
         })
 
-        generoWithPath.sort((a, b) => {
+        generosWithPath.sort((a, b) => {
             if(a.path < b.path) return -1
             if(a.path > b.path) return 1
             return 0
         })
 
-        return generoWithPath
+        return generosWithPath
     }
 
     const get = (req, res) => {
@@ -87,21 +87,21 @@ module.exports = app => {
             .catch(err => res.status(500).send(err))
     }
 
-    const toTree = (catgories,  tree) => {
+    const toTree = (generos, tree) => {
         if(!tree) tree = generos.filter(c => !c.relacaoId)
         tree = tree.map(parentNode => {
             const isChild = node => node.relacaoId == parentNode.id
-            parentNode.children = toTree(catgories, catgories.filter(isChild))
+            parentNode.children = toTree(generos, generos.filter(isChild))
             return parentNode
         })
         return tree
-    
     }
 
     const getTree = (req, res) => {
         app.db('generos')
-        .then(generos => res.status(200).json(toTree(generos)))
-        .catch(err => res.status(500).send(err))
+            .then(generos => res.json(toTree(generos)))
+            .catch(err => res.status(500).send(err))
     }
+
     return { save, remove, get, getById, getTree }
 }

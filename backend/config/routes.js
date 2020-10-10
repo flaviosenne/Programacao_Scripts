@@ -51,9 +51,9 @@ module.exports = app => {
         .get(admin(app.api.genero.get))
         .post(admin(app.api.genero.save))
 
-    app.route('/generos/:id/generos')
+    app.route('/generos/:id/livros')
         .all(app.config.passport.authenticate())
-        .get(app.api.genero.getById)
+        .get(app.api.livro.getByGenero)
 
     app.route('/generos/tree')
         .all(app.config.passport.authenticate())
