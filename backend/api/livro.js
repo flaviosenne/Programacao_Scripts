@@ -39,7 +39,7 @@ module.exports = app => {
                     .where({id: req.params.id}).del()
 
             try{
-                existOrError(rowsDeleted, 'Livro não foi encontrado')
+                existsOrError(rowsDeleted, 'Livro não foi encontrado')
             }
             catch(err){
                 return res.status(400).send(err)

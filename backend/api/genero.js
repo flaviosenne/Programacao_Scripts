@@ -28,10 +28,10 @@ module.exports = app => {
     const remove = async (req, res) => {
         try {
             existsOrError(req.params.id, 'Código do Gênero não informado')
-            const subcategory = await app.db('generos')
+            const subgeneros = await app.db('generos')
                 .where({ parentId: req.params.id })
             
-            notExistsOrError(subcategory, 'Genero possui subgêneros.')
+            notExistsOrError(subgeneros, 'Genero possui subgêneros.')
 
             const articles = await app.db('generos')
                 .where({ categoryId: req.params.id })
@@ -54,7 +54,7 @@ module.exports = app => {
             return parent.length ? parent[0] : null
         }
 
-        const categoriesWithPath = generos.map(genero => {
+        const generoWithPath = generos.map(genero => {
             let path = genero.name
             let parent = getParent(generos, genero.parentId)
 
@@ -65,13 +65,13 @@ module.exports = app => {
             return { ...genero, path }
         })
 
-        categoriesWithPath.sort((a, b) => {
+        generoWithPath.sort((a, b) => {
             if(a.path < b.path) return -1
             if(a.path > b.path) return 1
             return 0
         })
 
-        return categoriesWithPath
+        return generoWithPath
     }
 
     const get = (req, res) => {
@@ -88,9 +88,9 @@ module.exports = app => {
     }
 
     const toTree = (catgories,  tree) => {
-        if(!tree) tree = generos.filter(c => !c.parentId)
+        if(!tree) tree = generos.filter(c => !c.relacaoId)
         tree = tree.map(parentNode => {
-            const isChild = node => node.parentId == parentNode.id
+            const isChild = node => node.relacaoId == parentNode.id
             parentNode.children = toTree(catgories, catgories.filter(isChild))
             return parentNode
         })
