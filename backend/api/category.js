@@ -87,21 +87,21 @@ module.exports = app => {
             .catch(err => res.status(500).send(err))
     }
 
-    const toTree = (catgories,  tree) => {
+    const toTree = (categories, tree) => {
         if(!tree) tree = categories.filter(c => !c.parentId)
         tree = tree.map(parentNode => {
             const isChild = node => node.parentId == parentNode.id
-            parentNode.children = toTree(catgories, catgories.filter(isChild))
+            parentNode.children = toTree(categories, categories.filter(isChild))
             return parentNode
         })
         return tree
-    
     }
 
     const getTree = (req, res) => {
         app.db('categories')
-        .then(categories => res.status(200).json(toTree(categories)))
-        .catch(err => res.status(500).send(err))
+            .then(categories => res.json(toTree(categories)))
+            .catch(err => res.status(500).send(err))
     }
+
     return { save, remove, get, getById, getTree }
 }

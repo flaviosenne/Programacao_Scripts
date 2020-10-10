@@ -7,5 +7,6 @@ module.exports = {
                 WHERE "parentId" = subcategories.id
         )
         SELECT id FROM subcategories
+
     `
 }

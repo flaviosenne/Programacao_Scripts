@@ -1,25 +1,22 @@
-const express = require('express')
-const cosign = require('consign')
+const app = require('express')()
+const consign = require('consign')
+const db = require('./config/db')
+const mongoose = require('mongoose')
 
-// instance express
-const app = express()
-
-// initialize BD
-const mongoose = require('./config/mongo')
-const db = require('./config/postgres')
-
+require('./config/mongo')
 
 app.db = db
 app.mongoose = mongoose
 
+consign()
+    .include('./config/passport.js')
+    .then('./config/middlewares.js')
+    .then('./api/validation.js')
+    .then('./api')
+    .then('./schedule')
+    .then('./config/routes.js')
+    .into(app)
 
-cosign()
-.include('./config/passport.js')
-.then('./config/middlewares.js')
-.then('./api/validation.js')
-.then('./api')
-.then('./config/routes.js')
-.into(app)
-
-
-app.listen(3000, console.log('server'))
+app.listen(3000, () => { 
+    console.log('Backend executando...')
+})
