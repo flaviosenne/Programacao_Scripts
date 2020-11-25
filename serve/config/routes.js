@@ -46,32 +46,8 @@ module.exports = app => {
         .all(app.config.passport.authenticate())
         .get(app.api.article.getByCategory)
 
-    app.route('/generos')
-        .all(app.config.passport.authenticate())
-        .get(admin(app.api.genero.get))
-        .post(admin(app.api.genero.save))
-
-    app.route('/generos/:id/livros')
-        .all(app.config.passport.authenticate())
-        .get(app.api.livro.getByGenero)
-
-    app.route('/generos/tree')
-        .all(app.config.passport.authenticate())
-        .get(app.api.genero.getTree)
-
-    app.route('/livros')
-        .all(app.config.passport.authenticate())
-        .get(admin(app.api.livro.get))
-        .post(admin(app.api.livro.save))
-
-    app.route('/livros/:id')
-        .all(app.config.passport.authenticate())
-        .get(app.api.livro.getById)
-        .put(admin(app.api.livro.save))
-        .delete(admin(app.api.livro.remove))
-
     app.route('/stats')
         .all(app.config.passport.authenticate())
         .get(app.api.stat.get)
-
+         
 }

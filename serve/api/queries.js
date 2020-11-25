@@ -8,15 +8,5 @@ module.exports = {
         )
         SELECT id FROM subcategories
 
-    `,
-    generoWithChildren: `
-        WITH RECURSIVE subgeneros (id) AS (
-            SELECT id FROM generos WHERE id = ?
-            UNION ALL
-            SELECT c.id FROM subgeneros, generos c
-                WHERE "relacaoId" = subgeneros.id
-        )
-        SELECT id FROM subgeneros
-
     `
 }
