@@ -1,25 +1,12 @@
-const { db } = require('./.env')
-
-// module.exports = {
-//     client: 'postgresql',
-//     connection: db,
-//     pool: {
-//       min: 2,
-//       max: 10
-//     },
-//     migrations: {
-//       tableName: 'knex_migrations'
-//     }
-// }
 module.exports = {
 
   development: {
-    client: 'sqlite3',
+    client: 'sqlite',
     connection: {
-      filename: './config/dbteste.sqlite'
+      filename: 'config/db.sqlite'
     },
     migrations:{
-      directory: './config/migrations'
+      directory: 'migrations'
     },
     useNullAsDefault: true
   }

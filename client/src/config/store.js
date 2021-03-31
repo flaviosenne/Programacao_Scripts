@@ -7,8 +7,8 @@ export default new Vuex.Store({
     state: {
         isMenuVisible: true,
         user: {
-            name: 'Alexandre',
-            email: 'agsilva000@gmail.com'
+            name: 'João Flávio',
+            email: 'flaviosenne123@gmail.com'
         }
     },
     mutations: {

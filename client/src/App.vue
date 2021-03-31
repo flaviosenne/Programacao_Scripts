@@ -1,6 +1,6 @@
 <template>
   <div id="app" :class="{'hide-menu': !isMenuVisible}">
-	  <Header title="Base de Conhecimento"
+	  <Header title="Programação de Scripts"
       :hideToggle="false"
       :hideUserDropdown="false"/>
     <Menu />

@@ -26,7 +26,7 @@
           <i class="fa fa-pencil"></i>
         </b-button>
         <b-button variant="danger" @click="removecategory(data.item.id)" class="mr-2">
-          <i class="fa fa-pencil"></i>
+          <i class="fa fa-trash"></i>
         </b-button>
       </template>
         
