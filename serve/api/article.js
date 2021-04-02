@@ -1,3 +1,4 @@
+const { json } = require('body-parser')
 const queries = require('./queries')
 
 module.exports = app => {
@@ -47,14 +48,14 @@ module.exports = app => {
         }
     }
 
-    const limit = 10
+    const limit = 5
 
     const get = async (req, res) => {
         const page = req.query.page || 1
 
-        const result = await app.db('articles').count('id').first()
+        const result = await app.db('articles').count().first()
 
-        const count = parseInt(result.count)
+        const count = Object.values(result)[0]
 
         app.db('articles')
             .select('id', 'name', 'description')
