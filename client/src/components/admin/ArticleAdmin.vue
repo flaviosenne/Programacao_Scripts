@@ -134,7 +134,6 @@ export default {
     loadarticles() {
       const url = `${baseApiUrl}/articles?page=${this.page}`;
       axios.get(url).then((res) => {
-        console.log(res.data)
         this.articles = res.data.data
         this.count = res.data.count
         this.limit = res.data.limit
