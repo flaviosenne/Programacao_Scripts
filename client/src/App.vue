@@ -1,54 +1,88 @@
 <template>
-  <div id="app" :class="{'hide-menu': !isMenuVisible || !user}">
-	  <Header title="Programação de Scripts"
+  <div id="app" :class="{ 'hide-menu': !isMenuVisible || !user }">
+    <Header
+      title="Programação de Scripts"
       :hideToggle="!user"
-      :hideUserDropdown="!user"/>
-    <Menu v-if="user"/>
-    <Content />
+      :hideUserDropdown="!user"
+    />
+    <Menu v-if="user" />
+    <Loading v-if="validateToken" />
+    <Content v-else />
     <Footer />
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex"
-import Header from "./components/template/Header"
-import Menu from "./components/template/Menu"
-import Content from "./components/template/Content"
-import Footer from "./components/template/Footer"
+import axios from "axios";
+import { baseApiUrl, userKey } from "@/global";
+import { mapState } from "vuex";
+import Loading from "./components/template/Loading";
+import Header from "./components/template/Header";
+import Menu from "./components/template/Menu";
+import Content from "./components/template/Content";
+import Footer from "./components/template/Footer";
 
 export default {
   name: "App",
-  components: { Header, Menu, Content, Footer },
-  computed: mapState(['isMenuVisible', 'user'])
-}
+  components: { Header, Menu, Content, Footer, Loading },
+  computed: mapState(["isMenuVisible", "user"]),
+  data: function () {
+    return {
+      validateToken: true,
+    };
+  },
+  async mounted() {
+   this.validateToken = true;
+
+      const json = localStorage.getItem(userKey);
+      const userData = JSON.stringify(json);
+      this.$store.commit("setUser", null);
+
+      if (!userData) {
+        this.validateToken = false;
+        this.$router.push({ path: "/auth" });
+        return;
+      }
+
+      console.log("estou chegando aqui");
+      const res = await axios.post(`${baseApiUrl}/validateToken`, userData);
+      if (res.data) {
+        this.$store.commit("setUser", userData);
+      } else {
+        localStorage.removeItem(userData);
+        this.$router.push({ path: "/auth" });
+      }
+
+      this.validateToken = false;
+  },
+};
 </script>
 
 <style>
-  * {
-    font-family: "Lato", sans-serif;
-  }
+* {
+  font-family: "Lato", sans-serif;
+}
 
-  body {
-    margin: 0;
-  }
+body {
+  margin: 0;
+}
 
-  #app {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    height: 100vh;
-    display: grid;
-    grid-template-rows: 60px 1fr 40px ;
-    grid-template-columns: 300px 1fr;
-    grid-template-areas: 
-      "header header"
-      "menu content"
-      "menu footer"
-  }
-  #app.hide-menu {
-    grid-template-areas: 
-      "header header"
-      "content content"
-      "footer footer"
-  }
-
+#app {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 60px 1fr 40px;
+  grid-template-columns: 300px 1fr;
+  grid-template-areas:
+    "header header"
+    "menu content"
+    "menu footer";
+}
+#app.hide-menu {
+  grid-template-areas:
+    "header header"
+    "content content"
+    "footer footer";
+}
 </style>
