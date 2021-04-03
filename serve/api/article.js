@@ -76,11 +76,11 @@ module.exports = app => {
     }
 
     const getByCategory = async (req, res) => {
-        console.log("cheguei")
         const categoryId = req.params.id
         const page = req.query.page || 1
         const categories = await app.db.raw(queries.categoryWithChildren, categoryId)
-        const ids = categories.rows.map(c => c.id)
+        const ids = categories.map(c => c.id)
+        
 
         app.db({a: 'articles', u: 'users'})
             .select('a.id', 'a.name', 'a.description', 'a.imageUrl', { author: 'u.name' })
