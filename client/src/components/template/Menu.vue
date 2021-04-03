@@ -26,7 +26,7 @@ export default {
             treeFilter: '',
             treeData: this.getTreeData(),
             treeOptions: {
-                propertyName: {'text': 'name'},
+                propertyNames: {'text': 'name'},
                 filter: {emptyText: 'Categoria não encontrada'}
             }
         }
@@ -35,7 +35,16 @@ export default {
         getTreeData(){
             const url = `${baseApiUrl}/categories/tree`
             return axios(url).then(res => res.data)
+        },
+        onNodeSelected(node){
+            this.$router.push({
+                name: 'articlesByCategory',
+                params: { id: node.id}
+            })
         }
+    },
+    mounted(){
+        this.$refs.tree.$on('node:selected', this.onNodeSelected)
     }
 }
 </script>
@@ -48,8 +57,9 @@ export default {
         flex-direction: column;
         flex-wrap: wrap;
     }
+    
     .menu a,
-    menu a:hover{
+    .menu a:hover{
         color: #fff;
         text-decoration: none;
     }
