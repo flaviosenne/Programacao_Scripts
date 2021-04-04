@@ -37,7 +37,7 @@ export default {
     const json = localStorage.getItem(userKey);
     
     const userData = JSON.parse(json);
-    this.$store.commit("setUser", null);
+    // this.$store.commit("setUser", null);
 
     if (!userData) {
       this.validateToken = false;
@@ -49,7 +49,8 @@ export default {
     if (res.data) {
       this.$store.commit("setUser", userData);
       this.$router.push({ path: "/" });
-    } else {
+    }
+     else {
       localStorage.removeItem(userData);
       this.$router.push({ path: "/auth" });
     }

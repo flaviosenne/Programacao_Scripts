@@ -34,11 +34,11 @@ module.exports = app => {
     }
 
     const validateToken = async (req, res) => {
-        console.log(req.body)
         const userData = req.body || null
         try {
             if(userData) {
                 const token = jwt.decode(useData.token, authSecret)
+                console.log(token)
                 if(new Date(token.exp * 1000) > new Date())
                     return res.send(true)
             }
