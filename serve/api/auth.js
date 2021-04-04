@@ -34,6 +34,7 @@ module.exports = app => {
     }
 
     const validateToken = async (req, res) => {
+        console.log(req.body)
         const userData = req.body || null
         try {
             if(userData) {

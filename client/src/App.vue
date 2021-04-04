@@ -32,28 +32,29 @@ export default {
     };
   },
   async mounted() {
-   this.validateToken = true;
+    this.validateToken = true;
 
-      const json = localStorage.getItem(userKey);
-      const userData = JSON.stringify(json);
-      this.$store.commit("setUser", null);
+    const json = localStorage.getItem(userKey);
+    
+    const userData = JSON.parse(json);
+    this.$store.commit("setUser", null);
 
-      if (!userData) {
-        this.validateToken = false;
-        this.$router.push({ path: "/auth" });
-        return;
-      }
-
-      console.log("estou chegando aqui");
-      const res = await axios.post(`${baseApiUrl}/validateToken`, userData);
-      if (res.data) {
-        this.$store.commit("setUser", userData);
-      } else {
-        localStorage.removeItem(userData);
-        this.$router.push({ path: "/auth" });
-      }
-
+    if (!userData) {
       this.validateToken = false;
+      this.$router.push({ path: "/auth" });
+      return;
+    }
+
+    const res = await axios.post(`${baseApiUrl}/validateToken`, userData);
+    if (res.data) {
+      this.$store.commit("setUser", userData);
+      this.$router.push({ path: "/" });
+    } else {
+      localStorage.removeItem(userData);
+      this.$router.push({ path: "/auth" });
+    }
+
+    this.validateToken = false;
   },
 };
 </script>
